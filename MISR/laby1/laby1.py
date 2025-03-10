@@ -8,6 +8,8 @@ import matplotlib
 from matplotlib import pyplot as plt
 # ...
 
+#komentarz test windowsa srindowsa czy działa git extensions 
+
 # definicje funkcji:
 def przyklad_1():
     pass # zastąp tę linię swoim kodem
