@@ -1,3 +1,4 @@
+from os.path import join
 import roboticstoolbox as rtb
 import numpy as np
 from spatialmath import *
@@ -36,9 +37,9 @@ def zadanie_3():
     y_toplot = Pt_list[:, 1]
     
     # TODO: wykreśl wykres punktów o współrzędnych x_toplot, y_toplot
-    plt.figure()
-    plt.plot(x_toplot,y_toplot)
-    plt.show()
+    #plt.figure()
+    #plt.plot(x_toplot,y_toplot)
+    #plt.show()
 
     robot = rtb.models.DH.Panda()# TODO: załaduj robota Panda
     
@@ -49,6 +50,7 @@ def zadanie_3():
 
     smooth_traj = False
     joint_c = []
+    i = 0 
     while not smooth_traj:
         for T in T_list:
             sol = robot.ikine_LM(T)# TODO: oblicz kinematykę odwrotną dla listy macierzy transformacji
@@ -56,9 +58,15 @@ def zadanie_3():
                 print("IK failed for", T, "\n")
                 return
             joint_c.append(sol.q)
+            i+=1
+            #print(i, "   ", sol.q)
+            if i==48:
+                smooth_traj=True
 
-    smooth_traj = check_smooth_traj(sol)
+    #smooth_traj = check_smooth_traj(sol)
 
+    print(joint_c)
+    joint_c = np.array(joint_c)
     traj = rtb.mstraj(joint_c,dt=0.02,tacc=0.2,qdmax=2.0) # TODO: utwórz trajektorię o wielu odcinkach - lista waypointów to lista konfiguracji z rozwiązania kin. odwr.
     rtb.xplot(traj.q, block=True)
     
