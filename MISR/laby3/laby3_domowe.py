@@ -6,7 +6,7 @@ from spatialmath.base import *
 from matplotlib import pyplot as plt
 from roboticstoolbox.tools.trajectory import mstraj,jtraj
 
-def check_smooth_traj(q1, q2 , jump_threshold=1):
+def check_smooth_traj(q1, q2 , jump_threshold=0.5):
     dists = []
     for i in range(len(q1)):
         dists.append(np.fabs(q1[i]-q2[i]))
@@ -54,14 +54,14 @@ def zadanie_3():
         smooth_traj = False
         sol_list.append(sol.q)
 
-    sol_list = [robot.ikine_LM(t_list[0]).q] + [sol_list]
+    #sol_list = [robot.ikine_LM(T_list[0]).q] + [sol_list]
 
     # TODO: utwórz trajektorię o wielu odcinkach - lista waypointów to lista konfiguracji z rozwiązania kin. odwr.
     traj = mstraj(np.asarray(sol_list),dt=0.02,tacc=0.1,qdmax=2.0) 
     rtb.xplot(traj.q, block=True)
     
     # TODO: wyświetl wizualizację ruchu w Swift / PyPlot
-    robot.plot(traj.q, backend = 'pyplot', limits=[-0.25, 1.25, -0.5, 0.5, 0, 1], movie='laby3/zadanie3_panda_pyplot.gif') 
+    robot.plot(traj.q, backend = 'pyplot', limits=[-0.25, 1.25, -0.5, 0.5, 0, 1], movie='zadanie3_panda_pyplot.gif') 
 
 
 if __name__ == '__main__':
