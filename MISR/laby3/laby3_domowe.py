@@ -6,6 +6,13 @@ from spatialmath.base import *
 from matplotlib import pyplot as plt
 from roboticstoolbox.tools.trajectory import mstraj,jtraj
 
+def check_smooth_traj(q1, q2 , jump_threshold=1):
+    dists = []
+    for i in range(len(q1)):
+        dists.append(np.fabs(q1[i]-q2[i]))
+    print(max(dists))
+    return max(dists) < jump_threshold
+
 def zadanie_3():
     points_number = 50
     eef_height = 0.15
@@ -26,20 +33,31 @@ def zadanie_3():
     plt.plot(x_toplot,y_toplot)
     plt.show()
 
-    # TODO: załaduj robota Panda
+    # TODO: załaduj robota PandaP
     robot = models.DH.Panda()
 
     # TODO: do listy dodaj pierwszą macierz 4x4 - pozycję końcówki dla konfiguracji robot.qz
     # TODO: rozszerz listę o listę macierzy 4x4 leżących na okręgu (do utworzenia listy macierzy użyj listy punktów Pt_list, pamiętaj o zadaniu orientacji - chwytak w dół)
     T_list = [robot.fkine(robot.qz)] + [SE3(x,y,z)*SE3.OA([0,1,0],[0,0,-1]) for x,y,z in Pt_list]
    
-    sol_list = [] 
-    for pos in T_list[1:]:
-        sol = robot.ikine_LM(pos)
+    sol_init = robot.ikine_LM(T_list[1]).q
+    sol_list = [sol_init] + [] 
+    i=0
+    for pos in T_list[1:]:  
+        smooth_traj = False
+        while not smooth_traj:
+        # w tym while z checkiem 
+            sol = robot.ikine_LM(pos)
+            smooth_traj = check_smooth_traj(np.asarray(sol.q),np.asarray(sol_list[i]))
+            print(i)
+        i+=1 
+        smooth_traj = False
         sol_list.append(sol.q)
 
+    sol_list = [robot.ikine_LM(t_list[0]).q] + [sol_list]
+
     # TODO: utwórz trajektorię o wielu odcinkach - lista waypointów to lista konfiguracji z rozwiązania kin. odwr.
-    traj = mstraj(np.asarray(sol_list),dt=0.02,tacc=0.2,qdmax=2.0) 
+    traj = mstraj(np.asarray(sol_list),dt=0.02,tacc=0.1,qdmax=2.0) 
     rtb.xplot(traj.q, block=True)
     
     # TODO: wyświetl wizualizację ruchu w Swift / PyPlot
