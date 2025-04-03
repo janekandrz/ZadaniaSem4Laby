@@ -45,19 +45,22 @@ def zadanie_3():
     i=0
     for pos in T_list[1:]:  
         smooth_traj = False
+        sol = robot.ikine_LM(pos,q0=sol_list[i])
+        """
         while not smooth_traj:
         # w tym while z checkiem 
-            sol = robot.ikine_LM(pos)
+            sol = robot.ikine_LM(pos, q0=sol_lsit[i]) # ro bez while zrobic 
             smooth_traj = check_smooth_traj(np.asarray(sol.q),np.asarray(sol_list[i]))
             print(i)
         i+=1 
         smooth_traj = False
+        """
         sol_list.append(sol.q)
 
     #sol_list = [robot.ikine_LM(T_list[0]).q] + [sol_list]
 
     # TODO: utwórz trajektorię o wielu odcinkach - lista waypointów to lista konfiguracji z rozwiązania kin. odwr.
-    traj = mstraj(np.asarray(sol_list),dt=0.02,tacc=0.1,qdmax=2.0) 
+    traj = mstraj(np.asarray(sol_list),dt=0.02,tacc=0.02,qdmax=5.0) 
     rtb.xplot(traj.q, block=True)
     
     # TODO: wyświetl wizualizację ruchu w Swift / PyPlot
