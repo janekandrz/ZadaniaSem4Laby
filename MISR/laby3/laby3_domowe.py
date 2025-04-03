@@ -35,15 +35,15 @@ def zadanie_3():
 
     # TODO: załaduj robota PandaP
     robot = models.DH.Panda()
-
+    
     # TODO: do listy dodaj pierwszą macierz 4x4 - pozycję końcówki dla konfiguracji robot.qz
     # TODO: rozszerz listę o listę macierzy 4x4 leżących na okręgu (do utworzenia listy macierzy użyj listy punktów Pt_list, pamiętaj o zadaniu orientacji - chwytak w dół)
     T_list = [robot.fkine(robot.qz)] + [SE3(x,y,z)*SE3.OA([0,1,0],[0,0,-1]) for x,y,z in Pt_list]
    
-    sol_init = robot.ikine_LM(T_list[1]).q
+    sol_init = robot.ikine_LM(T_list[0]).q
     sol_list = [sol_init] + [] 
-    i=0
-    for pos in T_list[1:]:  
+    #i=0
+    for pos in T_list:  
         smooth_traj = False
         sol = robot.ikine_LM(pos,q0=sol_list[i])
         """
@@ -55,9 +55,10 @@ def zadanie_3():
         i+=1 
         smooth_traj = False
         """
+        #print(sol.q)
         sol_list.append(sol.q)
 
-    #sol_list = [robot.ikine_LM(T_list[0]).q] + [sol_list]
+    #sol_list = [initial] + [sol_list]
 
     # TODO: utwórz trajektorię o wielu odcinkach - lista waypointów to lista konfiguracji z rozwiązania kin. odwr.
     traj = mstraj(np.asarray(sol_list),dt=0.02,tacc=0.02,qdmax=5.0) 
