@@ -1,0 +1,22 @@
+
+robot = SerialLink([
+    Prismatic('theta',0,'a', 0, 'alpha', 0, 'qlim', [0 2],'offset',1)  
+    Revolute('d', 1, 'a', 0, 'alpha', pi/2, 'qlim', [-pi pi])   
+    Prismatic('theta', -pi/2, 'a', 0, 'alpha', pi/2, 'qlim', [0 2]) 
+], 'name', 'PRP Robot');
+
+q=[1 0 2];
+
+% Wizualizacja
+robot.plot(q, 'workspace', [-3 3 -3 3 -1 4]);
+hold on;
+
+% Plot coordinate frames for each link
+for i = 1:robot.n
+    T = robot.A(1:i, q);  % Forward kinematics to the i-th link
+    trplot(T, 'frame', sprintf('F%d', i), 'length', 0.5);
+end
+
+% Plot end-effector frame
+T_ee = robot.fkine(q);
+trplot(T_ee, 'frame', 'EE', 'length',1);

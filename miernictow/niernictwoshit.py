@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd 
 
-df = pd.read_csv("Waveform.csv")
+df = pd.read_csv("Waveform2.csv")
 
 df_cleaned = df.iloc[1:].reset_index(drop=True)
 
@@ -16,5 +16,5 @@ plt.ylabel("CH1 Voltage (V)")
 plt.title("Waveform Data Plot")
 plt.legend()
 plt.grid()
+plt.savefig("waveform plot2")
 plt.show()
-plt.savefig("waveform plot")

@@ -17,9 +17,9 @@ def zadanie_3():
         rtb.PrismaticDH(theta=0, a=0, alpha=0,offset=l2) 
     ])
 
-    #for i in range(len(robot.links)):
-        #print(robot.links[i])
-    #return robot
+    for i in range(len(robot.links)):
+        print(robot.links[i])
+    return robot
 
     J = robot.jacob0([t1, t2, d3])
     np.set_printoptions(precision=3,suppress=True)

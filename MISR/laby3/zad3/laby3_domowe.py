@@ -42,7 +42,7 @@ def zadanie_3():
    
     sol_init = robot.ikine_LM(T_list[0]).q
     sol_list = [sol_init] + [] 
-    i=0
+    #i=0
     for pos in T_list:  
         smooth_traj = False
         sol = robot.ikine_LM(pos,q0=sol_list[i])
@@ -52,11 +52,10 @@ def zadanie_3():
             sol = robot.ikine_LM(pos, q0=sol_lsit[i]) # ro bez while zrobic 
             smooth_traj = check_smooth_traj(np.asarray(sol.q),np.asarray(sol_list[i]))
             print(i)
-        
+        i+=1 
         smooth_traj = False
         """
         #print(sol.q)
-        i+=1 
         sol_list.append(sol.q)
 
     #sol_list = [initial] + [sol_list]
@@ -66,7 +65,7 @@ def zadanie_3():
     rtb.xplot(traj.q, block=True)
     
     # TODO: wyświetl wizualizację ruchu w Swift / PyPlot
-    robot.plot(traj.q, backend = 'pyplot', limits=[-0.25, 1.25, -0.5, 0.5, 0, 1]) 
+    robot.plot(traj.q, backend = 'pyplot', limits=[-0.25, 1.25, -0.5, 0.5, 0, 1], movie='zadanie3_panda_pyplot.gif') 
 
 
 if __name__ == '__main__':
